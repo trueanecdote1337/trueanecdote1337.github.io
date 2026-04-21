@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>logs // anecdote shelter</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="container">
+
+    <pre class="logo">anecdote shelter // logs</pre>
+    <div class="prompt">anecdote@shelter:/logs<span class="cursor"></span></div>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <nav>
+          <ul>
+            <li><a href="index.html">/shelter</a></li>
+            <li><a href="blog.html">/logs</a></li>
+            <li><a href="about.html">/whoami</a></li>
+            <li><a href="https://github.com/trueAnectode1337" target="_blank">/src</a></li>
+          </ul>
+        </nav>
+
+        <div id="uptime"></div>
+
+        <div class="sidebar-meta">
+          > ls -lah /logs<br>
+          > 2 entries<br>
+          > sorted: mtime desc
+        </div>
+      </aside>
+
+      <main class="content">
+        <h2>directory listing</h2>
+
+        <article>
+          <h3><a href="logs/log_001.html">• log_001 — Intel DCI on Z390</a></h3>
+          <p>
+            under constructed :)
+          </p>
+          <div style="margin-bottom:0.45rem;">
+            <span class="tag">binary</span>
+            <span class="tag">re</span>
+            <span class="tag">kernel</span>
+          </div>
+          <span class="meta">2026-xx-xx xx:xx // 6.6 kb // ring -3</span>
+        </article>
+
+        <article>
+          <h3><a href="logs/log_000.html">• log_000 — my experience on the H61 platform</a></h3>
+          <p>
+           a direct and extremely honest look at real code injection methods in UEFI
+          </p>
+          <div style="margin-bottom:0.45rem;">
+            <span class="tag">firmware</span>
+            <span class="tag">re</span>
+            <span class="tag">uefi</span>
+            <span class="tag">x86</span>
+            <span class="tag">uart</span>
+          </div>
+          <span class="meta">2026-04-05 03:33 // 6.6 kb // core</span>
+        </article>
+
+        <!-- add new logs here -->
+
+        <div class="hexdump" aria-hidden="true">
+<span class="addr">0x0804a000</span>  6c 6f 67 5f 30 30 30 00  6c 6f 67 5f 30 30 31 00  <span class="ascii">|log_000.log_001.|</span>
+<span class="addr">0x0804a010</span>  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  <span class="ascii">|................|</span>
+        </div>
+
+      </main>
+    </div>
+
+    <footer>
+      <p>anecdote shelter © 2026</p>
+      <p><span class="f-prompt">anecdote@shelter:~$</span> <span class="f-cmd">tail -f /logs/incoming</span></p>
+    </footer>
+  </div>
+  <script src="shelter.js"></script>
+</body>
+</html>

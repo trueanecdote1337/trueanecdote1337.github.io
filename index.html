@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>anecdote shelter</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="scanlines"></div>
+
+  <!-- boot sequence -->
+  <div id="boot" class="boot">
+    <pre>
+[    0.000] anecdote/shelter — kernel 0.x.ringsbelow0
+[    0.104] initializing entropy pool . . . . . . . OK
+[    0.231] memory region scan . . . . . . . . . . . OK
+[    0.418] privilege boundary check . . . . . BYPASSED
+[    0.601] hardware abstraction layer . . . . . PATCHED
+[    0.777] write protection . . . . . . . . . . REMOVED
+[    0.999] root acquired. entering shelter.
+<span class="cursor">█</span></pre>
+  </div>
+
+  <div id="shell" class="hidden">
+    <div class="container">
+
+      <pre class="logo">
+@@@@@@   @@@  @@@  @@@@@@@@   @@@@@@@  @@@@@@@    @@@@@@   @@@@@@@  @@@@@@@@      @@@@@@   @@@  @@@  @@@@@@@@  @@@       @@@@@@@  @@@@@@@@  @@@@@@@
+@@@@@@@@  @@@@ @@@  @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@@@@@  @@@@@@@@     @@@@@@@   @@@  @@@  @@@@@@@@  @@@       @@@@@@@  @@@@@@@@  @@@@@@@@
+@@!  @@@  @@!@!@@@  @@!       !@@       @@!  @@@  @@!  @@@    @@!    @@!          !@@       @@!  @@@  @@!       @@!         @@!    @@!       @@!  @@@
+!@!  @!@  !@!!@!@!  !@!       !@!       !@!  @!@  !@!  @!@    !@!    !@!          !@!       !@!  @!@  !@!       !@!         !@!    !@!       !@!  @!@
+@!@!@!@!  @!@ !!@!  @!!!:!    !@!       @!@  !@!  @!@  !@!    @!!    @!!!:!       !!@@!!    @!@!@!@!  @!!!:!    @!!         @!!    @!!!:!    @!@!!@!
+!!!@!!!!  !@!  !!!  !!!!!:    !!!       !@!  !!!  !@!  !!!    !!!    !!!!!:        !!@!!!   !!!@!!!!  !!!!!:    !!!         !!!    !!!!!:    !!@!@!
+!!:  !!!  !!:  !!!  !!:       :!!       !!:  !!!  !!:  !!!    !!:    !!:               !:!  !!:  !!!  !!:       !!:         !!:    !!:       !!: :!!
+:!:  !:!  :!:  !:!  :!:       :!:       :!:  !:!  :!:  !:!    :!:    :!:              !:!   :!:  !:!  :!:        :!:        :!:    :!:       :!:  !:!
+::   :::   ::   ::   :: ::::   ::: :::   :::: ::  ::::: ::     ::     :: ::::     :::: ::   ::   :::   :: ::::   :: ::::     ::     :: ::::  ::   :::
+ :   : :  ::    :   : :: ::    :: :: :  :: :  :    : :  :      :     : :: ::      :: : :     :   : :  : :: ::   : :: : :     :     : :: ::    :   : :
+      </pre>
+
+      <div class="prompt">anecdote@shelter:~<span class="cursor"></span></div>
+
+      <div class="layout">
+        <aside class="sidebar">
+          <nav>
+            <ul>
+              <li><a href="index.html">/shelter</a></li>
+              <li><a href="blog.html">/logs</a></li>
+              <li><a href="about.html">/whoami</a></li>
+              <li><a href="https://github.com/trueAnectode1337" target="_blank">/src</a></li>
+            </ul>
+          </nav>
+
+          <div class="status-box">
+            <h3>system</h3>
+            <ul>
+              <li>privilege . <span class="red">RING -3</span></li>
+              <li>sandbox . . <span class="red">ESCAPED</span></li>
+              <li>integrity . <span class="red">VOIDED</span></li>
+              <li>trace . . . <span class="red">CLEAN</span></li>
+            </ul>
+          </div>
+
+          <div id="uptime"></div>
+
+          <div class="sidebar-meta">
+            > uname -a shelter<br>
+            > 0 days without incident<br>
+            > pwd: /dev/null
+          </div>
+        </aside>
+
+        <main class="content">
+          <h2>latest logs</h2>
+
+        <article>
+          <h3><a href="logs/log_001.html">• log_001 — Intel DCI on Z390</a></h3>
+          <p>
+            under constructed :)
+          </p>
+          <span class="meta">2026-xx-xx xx:xx // 6.6 kb // jtag</span>
+        </article>
+
+        <article>
+          <h3><a href="logs/log_000.html">• log_000 — my experience on the H61 platform</a></h3>
+          <p>
+           a direct and extremely honest look at real code injection methods in UEFI
+          </p>
+          <span class="meta">2026-04-05 03:33 // 6.6 kb // core</span>
+        </article>
+
+
+          <div class="hexdump" aria-hidden="true">
+<span class="addr">0x00400000</span>  7f 45 4c 46 02 01 01 00  00 00 00 00 00 00 00 00  <span class="ascii">|.ELF............|</span>
+<span class="addr">0x00400010</span>  02 00 3e 00 01 00 00 00  40 10 40 00 00 00 00 00  <span class="ascii">|..&gt;.....@.@.....|</span>
+<span class="addr">0x00400020</span>  40 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  <span class="ascii">|@...............|</span>
+<span class="addr">0x00400030</span>  00 00 00 00 40 00 38 00  09 00 40 00 1c 00 1b 00  <span class="ascii">|....@.8...@.....|</span>
+          </div>
+
+          <h2>signal</h2>
+          <article>
+            <h3><span style="color:#2e2e2e">• currently</span></h3>
+            <p>
+              — studying binary internals and memory subsystems<br>
+              — tracing execution at the hardware boundary<br>
+              — reading disassembled code like poetry<br>
+            </p>
+            <span class="meta">status: active</span>
+          </article>
+        </main>
+      </div>
+
+      <footer>
+        <p><span class="f-prompt">anecdote shelter © 2026</span> <span class="f-cmd">echo "the kernel lies, the hardware doesn't"</span></p>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // boot fade
+    setTimeout(function() {
+      document.getElementById('boot').classList.add('fadeout');
+      setTimeout(function() {
+        document.getElementById('boot').style.display = 'none';
+        document.getElementById('shell').classList.remove('hidden');
+        // load shared scripts after reveal
+        var s = document.createElement('script');
+        s.src = 'shelter.js';
+        document.body.appendChild(s);
+      }, 650);
+    }, 3200);
+  </script>
+</body>
+</html>

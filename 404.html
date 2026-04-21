@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>404 // anecdote shelter</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 70vh;
+      text-align: center;
+    }
+
+    .err-code {
+      font-size: 72px;
+      font-weight: 700;
+      color: var(--red-dim);
+      line-height: 1;
+      letter-spacing: -2px;
+      margin-bottom: 0.4rem;
+      /* glitch applied via JS */
+    }
+    .err-code.g1 {
+      text-shadow: 4px 0 var(--red-bright), -4px 0 #001133;
+      transform: translateX(3px);
+    }
+    .err-code.g2 {
+      text-shadow: -5px 0 #ff0000, 5px 0 #000;
+      transform: translateX(-2px) skewX(1deg);
+      opacity: 0.65;
+    }
+    .err-code.g3 {
+      text-shadow: 2px 0 #ffffff33;
+      transform: translateX(1px);
+    }
+
+    .err-label {
+      color: #2a2a2a;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 2.5rem;
+    }
+
+    .err-terminal {
+      border: 1px solid #1a1a1a;
+      padding: 1.2rem 1.8rem;
+      max-width: 520px;
+      width: 100%;
+      text-align: left;
+      background: #020202;
+      margin-bottom: 2.5rem;
+    }
+    .err-terminal .line {
+      font-size: 12px;
+      color: #2e2e2e;
+      line-height: 2;
+    }
+    .err-terminal .line .addr  { color: #2a0000; }
+    .err-terminal .line .ok    { color: #2a5a2a; }
+    .err-terminal .line .fail  { color: var(--red-dim); }
+    .err-terminal .line .cmd   { color: #333; }
+
+    /* animated dots */
+    .dots::after {
+      content: '';
+      animation: dotdot 1.5s steps(4) infinite;
+    }
+    @keyframes dotdot {
+      0%  { content: ''; }
+      25% { content: '.'; }
+      50% { content: '..'; }
+      75% { content: '...'; }
+    }
+
+    .err-nav {
+      font-size: 12px;
+      color: #2a2a2a;
+      margin-bottom: 0.5rem;
+    }
+    .err-nav a {
+      color: var(--light);
+      text-decoration: none;
+      margin: 0 0.6rem;
+      transition: color 0.1s;
+    }
+    .err-nav a:hover { color: var(--red-bright); }
+
+    .err-sub {
+      font-size: 11px;
+      color: #1e1e1e;
+      margin-top: 1rem;
+    }
+
+    /* skull — pure ASCII, no JS magic needed */
+    .skull {
+      color: #1a0000;
+      font-size: 10px;
+      line-height: 1.4;
+      margin-bottom: 1.8rem;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="container">
+
+    <pre class="logo">anecdote shelter // 404</pre>
+    <div class="prompt">anecdote@shelter:~<span class="cursor"></span></div>
+
+    <div class="center">
+
+      <pre class="skull" aria-hidden="true">
+    ░░░░░░░░░░░░░
+    ░░  ░░░  ░░░
+    ░░░░░░░░░░░░░
+    ░░ ░░░░░ ░░░
+    ░░░ ░░░ ░░░░
+      </pre>
+
+      <div class="err-code" id="errcode">404</div>
+      <div class="err-label">page not found</div>
+
+      <div class="err-terminal">
+        <div class="line">
+          <span class="addr">0x00000000</span>&nbsp; segfault at <span class="fail">NULL</span> — reading unmapped region
+        </div>
+        <div class="line">
+          > resolving path<span class="dots"></span> <span class="fail">FAILED</span>
+        </div>
+        <div class="line">
+          > inode lookup . . . . . . . . <span class="fail">NO ENTRY</span>
+        </div>
+        <div class="line">
+          > fallback handler . . . . . . <span class="ok">LOADED</span>
+        </div>
+        <div class="line" style="margin-top:0.5rem;">
+          <span class="cmd">> what you were looking for doesn't exist here.</span>
+        </div>
+        <div class="line">
+          <span class="cmd">> it may have moved, or it never did.</span>
+        </div>
+        <div class="line" style="margin-top:0.5rem;color:#1e1e1e;">
+          EIP: 0xDEADBEEF &nbsp;|&nbsp; ESP: 0xCAFEBABE &nbsp;|&nbsp; EBP: 0x00000000
+        </div>
+      </div>
+
+      <div class="err-nav">
+        — navigate: &nbsp;
+        <a href="/index.html">/shelter</a>
+        <a href="/blog.html">/logs</a>
+        <a href="/about.html">/whoami</a>
+      </div>
+
+      <div class="err-sub">
+        or press <span style="color:#2a2a2a;">Alt+F4</span> to really leave
+      </div>
+
+    </div>
+
+    <footer>
+      <p>anecdote shelter © 2026</p>
+      <p>
+        <span class="f-prompt">anecdote@shelter:~$</span>
+        <span class="f-cmd">dmesg | grep "not found"</span>
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    // glitch on the big 404 number
+    (function() {
+      const el = document.getElementById('errcode');
+      if (!el) return;
+      const cls = ['g1','g2','g3'];
+
+      function run() {
+        const gap = 3000 + Math.random() * 7000;
+        setTimeout(function() {
+          let i = 0;
+          const flickers = 2 + Math.floor(Math.random() * 3);
+          (function flick() {
+            if (i >= flickers * 2) { el.classList.remove(...cls); run(); return; }
+            if (i % 2 === 0) el.classList.add(cls[Math.floor(Math.random()*cls.length)]);
+            else el.classList.remove(...cls);
+            i++;
+            setTimeout(flick, 45 + Math.random() * 90);
+          })();
+        }, gap);
+      }
+      run();
+    })();
+
+    // typewriter on prompt
+    (function() {
+      const el = document.querySelector('.prompt');
+      if (!el) return;
+      const cursor = el.querySelector('.cursor');
+      const full = el.textContent.trim();
+      el.textContent = '';
+      if (cursor) el.appendChild(cursor);
+      const node = document.createTextNode('');
+      el.insertBefore(node, cursor);
+      let i = 0;
+      const iv = setInterval(function() {
+        if (i >= full.length) { clearInterval(iv); return; }
+        node.textContent += full[i++];
+      }, 30);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>whoami // anecdote shelter</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="container">
+
+    <pre class="logo">anecdote shelter // whoami</pre>
+    <div class="prompt">anecdote@shelter:/whoami<span class="cursor"></span></div>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <nav>
+          <ul>
+            <li><a href="index.html">/shelter</a></li>
+            <li><a href="blog.html">/logs</a></li>
+            <li><a href="about.html">/whoami</a></li>
+            <li><a href="https://github.com/trueAnectode1337" target="_blank">/src</a></li>
+          </ul>
+        </nav>
+
+        <div id="uptime"></div>
+
+        <div class="sidebar-meta">
+          > id anecdote<br>
+          > uid=0(root)<br>
+          > groups=ring-3,core<br>
+          > shell=/bin/truth
+        </div>
+      </aside>
+
+      <main class="content">
+
+        <h2>identity</h2>
+        <div class="about-block">
+          <p>
+            > name: anecdote<br>
+            > os: arch (i use arch btw)<br>
+            > mission: <span class="danger">break the surface</span>
+          </p>
+        </div>
+
+        <h2>current state</h2>
+        <div class="about-block">
+          <ul>
+            <li>reverse engineering binaries for <span class="danger">sport and understanding</span></li>
+            <li>writing exploits that exist only to <span class="danger">teach themselves</span></li>
+            <li>reading kernel source instead of documentation</li>
+            <li>tracing syscalls until the <span class="danger">abstraction peels off</span></li>
+            <li>fuzzing things that were never meant to be fuzzed</li>
+          </ul>
+        </div>
+
+        <h2>interests</h2>
+        <div class="about-block">
+          <ul>
+            <li>binary analysis — static, dynamic, everything in between</li>
+            <li>vulnerability research at the hardware/software boundary</li>
+            <li>operating system internals and privilege models</li>
+            <li>the archaeology of abandoned firmware and forgotten specs</li>
+            <li>anything that lives below the abstraction you were handed</li>
+          </ul>
+        </div>
+
+        <!-- hex dump strip -->
+        <div class="hexdump" aria-hidden="true">
+<span class="addr">0xffff8000</span>  48 89 e5 48 83 ec 20 48  89 7d f8 48 8b 45 f8 48  <span class="ascii">|H..H.. H.}.H.E.H|</span>
+<span class="addr">0xffff8010</span>  8b 00 48 89 c7 e8 00 00  00 00 48 83 c4 20 5d c3  <span class="ascii">|..H.......H.. ].|</span>
+        </div>
+
+        <h2>beliefs</h2>
+        <div class="about-block">
+          <ul>
+            <li>low-level is not dead — it's <span class="danger">deliberately obscured</span></li>
+            <li>every abstraction is a lie told for convenience</li>
+            <li>the most honest code is the code no one reads</li>
+            <li>if you're not breaking something, you're <span class="danger">decorating the cage</span></li>
+            <li>understand the machine, not the metaphor</li>
+          </ul>
+        </div>
+
+        <h2>contact</h2>
+<div class="about-block">
+  <p>
+    > not on socials.<br>
+    > mail: <a href="mailto:reallydangerpoint@protonmail.com" style="color:var(--red)">reallydangerpoint@protonmail.com</a><br>
+  </p>
+</div>
+
+<h2>gpg public key</h2>
+<div class="gpg-container">
+  <pre id="gpg-key" class="gpg-block">
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+=LdQe
+-----END PGP PUBLIC KEY BLOCK-----</pre>
+</div>
+
+      </main>
+    </div>
+
+    <footer>
+      <p>anecdote shelter © 2026</p>
+      <p><span class="f-prompt">anecdote@shelter:~$</span> <span class="f-cmd">cat /proc/self/maps | grep truth</span></p>
+    </footer>
+  </div>
+  <script src="shelter.js"></script>
+</body>
+</html>
