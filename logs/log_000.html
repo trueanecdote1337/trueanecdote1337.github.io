@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>log_000 // anecdote shelter</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    /* ── IRC header block ───────────────────────── */
+    .irc-header {
+      border: 1px solid #1e1e1e;
+      padding: 1rem 1.2rem;
+      margin-bottom: 2.5rem;
+      font-size: 12px;
+      color: #333;
+      line-height: 2;
+      background: #030303;
+    }
+    .irc-header .irc-sys  { color: #2a4a2a; }
+    .irc-header .irc-cmd  { color: #2a2a5a; }
+    .irc-header .irc-join { color: #4a2a00; }
+    .irc-header .irc-nick { color: var(--red-dim); }
+
+    /* ── post body ──────────────────────────────── */
+    .post-body {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.9;
+    }
+    .post-body p {
+      margin-bottom: 1.4rem;
+    }
+    .post-body h3 {
+      color: var(--red);
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin: 2.5rem 0 1rem;
+      font-weight: 700;
+    }
+    .post-body h3::before { content: '── '; color: #222; }
+
+    /* method label */
+    .method-label {
+      display: inline-block;
+      border: 1px solid #2a0000;
+      color: var(--red-dim);
+      font-size: 11px;
+      padding: 0.1rem 0.6rem;
+      margin-bottom: 1rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* inline code / asm */
+    code {
+      color: #884444;
+      background: #0a0000;
+      padding: 0.1rem 0.4rem;
+      font-size: 12px;
+      border: 1px solid #1e1e1e;
+    }
+
+    /* image placeholder */
+    .img-placeholder {
+      border: 1px dashed #1e1e1e;
+      padding: 1.5rem;
+      margin: 1.4rem 0;
+      color: #252525;
+      font-size: 12px;
+      text-align: center;
+      background: #030303;
+    }
+    .img-placeholder span { color: #2a2a2a; }
+
+    /* link placeholder */
+    .link-placeholder {
+      display: inline-block;
+      color: #2a2a6a;
+      font-size: 12px;
+      border-bottom: 1px dashed #1a1a3a;
+      margin: 0.3rem 0;
+    }
+    .link-placeholder::before { content: '> '; color: #222; }
+
+    /* hardware spec table */
+    .hw-table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1rem 0 1.4rem;
+      font-size: 12px;
+    }
+    .hw-table td {
+      padding: 0.3rem 0.8rem 0.3rem 0;
+      color: #444;
+      border-bottom: 1px solid #111;
+      vertical-align: top;
+    }
+    .hw-table td:first-child {
+      color: #2e2e2e;
+      min-width: 140px;
+      white-space: nowrap;
+    }
+    .hw-table td:last-child { color: #666; }
+
+    /* result block */
+    .result {
+      border-left: 2px solid var(--red-dim);
+      padding: 0.7rem 1rem;
+      margin: 1.4rem 0;
+      background: #060000;
+      font-size: 12px;
+      color: #555;
+    }
+    .result .ok  { color: #2a6a2a; font-weight: bold; }
+    .result .fail{ color: var(--red-dim); font-weight: bold; }
+
+    /* note / aside */
+    .note {
+      border: 1px dashed #1a1a1a;
+      padding: 0.7rem 1rem;
+      margin: 1.2rem 0;
+      font-size: 12px;
+      color: #333;
+      background: #020202;
+    }
+    .note::before { content: 'note: '; color: #2a2a00; }
+
+    /* register highlight */
+    .reg { color: #884400; font-weight: bold; }
+
+    /* author sign-off */
+    .signoff {
+      margin-top: 3rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid #181818;
+      font-size: 12px;
+      color: #2a2a2a;
+    }
+
+    /* IRC disconnect */
+    .irc-footer {
+      margin-top: 2rem;
+      font-size: 12px;
+      color: #222;
+    }
+
+    /* back link */
+    .back {
+      display: inline-block;
+      color: var(--light);
+      text-decoration: none;
+      font-size: 12px;
+      margin-bottom: 2rem;
+    }
+    .back:hover { color: var(--red-bright); }
+    .back::before { content: '< '; color: #333; }
+  </style>
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="container">
+
+    <pre class="logo">anecdote shelter // log_000</pre>
+    <div class="prompt">anecdote@shelter:/logs/log_000<span class="cursor"></span></div>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <nav>
+          <ul>
+            <li><a href="../index.html">/shelter</a></li>
+            <li><a href="../blog.html">/logs</a></li>
+            <li><a href="../about.html">/whoami</a></li>
+            <li><a href="https://github.com/trueAnectode1337" target="_blank">/src</a></li>
+          </ul>
+        </nav>
+
+        <div class="sidebar-meta" style="margin-top:2rem;">
+          > log_000.html<br>
+          > size: ~6.6 kb<br>
+          > topic: firmware<br>
+          > platform: H61<br>
+          > date: 2026-04-05
+        </div>
+
+        <div class="status-box" style="margin-top:1.8rem;">
+          <h3>env</h3>
+          <ul>
+            <li>board . <span class="red">H61</span></li>
+            <li>tool . . <span class="red">UEFITool</span></li>
+            <li>dbg . . <span class="red">COM/UART</span></li>
+            <li>result . <span class="red">POSITIVE</span></li>
+          </ul>
+        </div>
+      </aside>
+
+      <main class="content">
+
+        <a href="../blog.html" class="back">back to /logs</a>
+
+        <!-- IRC welcome block -->
+        <div class="irc-header">
+          <span class="irc-sys">[server]</span> connecting to <span class="irc-cmd">darknoise://127.0.0.1:6667</span> ...<br>
+          <span class="irc-sys">[notice]</span> <span class="irc-nick">-ChanServ-</span> welcome to <span class="irc-cmd">##anecdote-shelter</span><br>
+          <span class="irc-cmd">*** anecdote</span> <span class="irc-join">has joined</span> <span class="irc-cmd">#log0</span><br>
+          <span class="irc-sys">[mode]</span> +o anecdote
+        </div>
+
+        <!-- post title -->
+        <div style="margin-bottom:2rem;">
+          <div style="color:#2a2a2a;font-size:11px;margin-bottom:0.4rem;">log_000 // 2026-02-05</div>
+          <h2 style="margin:0 0 0.5rem;font-size:16px;letter-spacing:1px;text-transform:none;color:var(--text);">
+            my experience on the H61 platform
+          </h2>
+          <div style="color:#333;font-size:12px;">
+            <span class="tag">firmware</span>
+            <span class="tag">re</span>
+            <span class="tag">uefi</span>
+            <span class="tag">x86</span>
+            <span class="tag">uart</span>
+          </div>
+        </div>
+
+        <div class="post-body">
+
+          <!-- intro -->
+          <p>
+            hey, glad you found this place. since you're here, i'll try to lay everything
+            out clearly — the goal is that you can actually use this information.
+            recently i got interested in pushing code into the firmware and looking at how
+            it behaves down there. today we're not going to cover the full persistence
+            mechanism, but we <em>will</em> walk through the injection methods i actually
+            used and what happened with each of them.
+          </p>
+
+          <!-- hardware -->
+          <h3>hardware setup</h3>
+          <p>
+            first things first — you need real hardware. yes, you can use a VM with OVMF
+            (and honestly it's a fine option for initial testing), but for seeing how
+            payloads behave on actual silicon, i prefer physical boards. in this writeup
+            i ended up using two motherboards — i'll explain why later.
+          </p>
+          <p>the primary board was an <code>ASUS P8H61M LX3 R2.0</code>. not a bad choice — almost everything needed was there. the rest of the rig:</p>
+
+          <table class="hw-table">
+            <tr><td>cpu</td><td>Intel Pentium G2020</td></tr>
+            <tr><td>dram</td><td>2 GB DDR3-1333</td></tr>
+            <tr><td>psu</td><td>450W (garbage, but it works)</td></tr>
+            <tr><td>hdd</td><td>500 GB Toshiba</td></tr>
+            <tr><td>bios</td><td>2012 vintage AMI firmware</td></tr>
+          </table>
+
+          <div class="note">
+            both boards share the same H61 chipset family. the second board comes in
+            later when the first one turns out to have a missing COM header — more on that below.
+          </div>
+
+          <!-- method 1 -->
+          <h3>method 1 — shellcode injection</h3>
+          <div class="method-label">technique: byte patching</div>
+
+          <p>
+            this one has no real tricks to it. the approach: find a string or byte
+            sequence inside a firmware module that the module doesn't strictly need
+            for correct operation, and overwrite those bytes with your payload.
+            before the injection, write your asm, assemble it to raw bytes, and
+            then you're ready to patch.
+          </p>
+          <p>
+            to do this, load your firmware image into
+            <code>UEFITool</code> — and make sure it's a dump you pulled
+            <em>from the board itself</em>, not a file downloaded from the vendor site.
+            flashing a modified image built from a downloaded ROM(Read-only memory) has a real chance
+            of producing a brick. dump it yourself.
+          </p>
+
+          <!-- IMAGE: bios dump in UEFITool -->
+          <div class="img-placeholder">
+            <img src="https://github.com/trueAnectode1337/logfiles/blob/main/log1/uefitool.jpg?raw=true" width="512" height="300" alt="UEFITool">
+          </div>
+
+          <p>
+            i targeted the <code>SmiFlash</code> module. the name is self-explanatory —
+            it holds SMM privileges even when it shows up as a DXE driver in the tree.
+            to verify the injection was actually running, i wrote a shellcode that
+            calls the PC speaker in a tight loop.
+
+            To inject code into the body of an existing function, we need to open the 
+            file itself with a binary editor. But to edit, we need to know where to 
+            write our payload, so I use ida pro for analysis. In this program, we 
+            need to find the function we defined in the file and check if there's 
+            free space for code injection in the same section (for example, .rdata). 
+            After that, we insert our code into the empty bytes and note the address 
+            where it's located.
+            </p>
+
+            <p>
+            Next, we need to find the location in the original function from which 
+            control will be transferred to our code. Typically, we select the beginning 
+            of the function or a section containing suitable instructions. It's important 
+            to preserve the original bytes that we'll overwrite so that program execution 
+            can continue correctly.
+
+            Then we replace the selected instructions with a jump (jmp) to our code. 
+            This way, when executed, the program will first access our insertion point. 
+            The required logic is executed inside it, after which we return back - either 
+            to the next instruction after the substitution, or by restoring the saved bytes 
+            and switching back to the original execution flow.
+          </p>
+
+          <!-- IMAGE: shellcode bytes -->
+          <div class="img-placeholder">
+             <img src="https://github.com/trueAnectode1337/logfiles/blob/main/log1/shellcode.jpg?raw=true" width="380" height="300" alt="UEFITool">
+          </div>
+
+          <p>
+            after patching the bytes, replace the module back into UEFITool, reflash,
+            and boot. the result: an infinite beep loop. what's interesting is that
+            the beeping was <em>extremely</em> fast — no audible gaps, just a continuous
+            high-pitched tone. that's because SMM handles the code in sync with the
+            processor clock, not in human-scale time. you get ultrasonic beeping
+            instead of the discrete clicks you'd expect.
+          </p>
+
+          <div class="result">
+            <span class="ok">[+]</span> payload executed. speaker beep confirmed SMM context.
+          </div>
+
+          <!-- method 2 -->
+          <h3>method 2 — building a proper payload</h3>
+          <div class="method-label">technique: function body replacement + ffs container</div>
+
+          <p>
+            by now this feels like "the basics," but the first few times i did this it was
+            genuinely disorienting. the approach here: replace the body of original
+            firmware functions with your own code.
+          </p>
+          <p>
+            to do that you first need an actual payload. i used <code>EDK II</code> —
+            specifically the <code>UDK2014</code> branch, for full compatibility with
+            a 2012-era board. newer branches might work too, but i didn't test them.
+            (the board has a 2012 BIOS, so... come on.)
+          </p>
+
+          <!-- LINK: github dockerfile -->
+          <div style="margin:1rem 0 1.4rem;">
+            <a href="https://github.com/trueAnectode1337/logfiles/blob/main/log1/Dockerfile" class="link-placeholder">[link] dockerfile for UDK2014 build environment → github</a><br>
+          </div>
+
+          <p>
+            after writing and compiling, you have a <code>.efi</code> file — the driver body.
+            i kept targeting <code>SmiFlash</code> since it doesn't affect system startup.
+            but first attempt: black screen. no POST, nothing. as if there was no BIOS at all.
+            tried a different module — same result.
+          </p>
+          <p>
+            then i ran an experiment: took a module called <code>AsusFptDxe</code> and replaced
+            its <em>body</em> with the content of <code>SmiFlash</code>. board posted fine.
+            so: swapping a native module's body under a different module's identity bypasses
+            whatever integrity checks exist and the board boots. useful to know.
+          </p>
+          <p>
+            spent a week trying to get my code running as both DXE and SMM.
+            nothing worked — just a black screen every time. then i remembered that
+            people had modded similar boards to add NVMe support where it wasn't
+            native. looked at that method, and it used a tool called <code>MMTool</code>.
+            it has a bunch of features but i only needed <em>replace</em> and <em>insert</em>.
+          </p>
+          <p>
+            the key realization: firmware modules aren't bare <code>.efi</code> files — they
+            live inside <code>FFS</code> (Firmware File System) containers. to get your
+            payload to load, it needs to <em>look right</em> from the firmware's perspective.
+            that means building a proper FFS container yourself.
+          </p>
+          <p>
+            i assembled the container body, used <code>GenSec</code> to create a correct
+            <code>DEPEX</code> (Dependency Expression is a section that describes the 
+            dependencies of a UEFI driver and determines under what conditions it should 
+            be loaded and executed; usually contains logical conditions related to protocol
+            availability), copied it from an already working driver, brought everything to 
+            the desired form, and then pasted it through <code>MMTool</code> as a new driver.
+          </p>
+
+          <!-- LINK: ffs build script -->
+          <div style="margin:1rem 0 1.4rem;">
+            <a href="https://github.com/trueAnectode1337/logfiles/blob/main/log1/build_smm.sh" class="link-placeholder">[link] ffs container build script → github</a><br>
+          </div>
+
+          <p>
+            three beeps, logo on screen. code is running.
+          </p>
+
+          <div class="result">
+            <span class="ok">[+]</span> FFS container accepted. driver loaded. payload executing.
+          </div>
+
+          <!-- debug / UART -->
+          <h3>debugging — the COM port problem</h3>
+          <div class="method-label">technique: uart over pci card</div>
+
+          <p>
+            getting the payload to run is one thing. actually seeing what it's doing is
+            another. i looked at debug options and settled on the COM port / serial approach.
+          </p>
+          <p>
+            problem: the <code>P8H61M LX3 R2.0</code> doesn't have the COM header populated
+            on the PCB. the SuperIO controller is there, there's even a hidden BIOS option
+            (found via <code>AMIBCE</code>), but the physical pins aren't soldered.
+            so i went with a PCI COM card — two-port, the cheapest one available —
+            plus a serial cable and a USB-to-COM adapter.
+          </p>
+          <p>
+            in Linux (Arch, manual <code>stty</code> setup) the signal came through fine.
+            in UEFI: nothing useful. the card has a non-standard controller that needs
+            specific initialization before it will do anything.
+          </p>
+          <p>
+            spent two weeks trying to make it work in UEFI shell. wrote a lot of test code.
+            the core issue: <code><span class="reg">LSR</span></code> (Line Status Register)
+            during UART init kept returning <code>0xFF</code> or <code>0x4D</code> —
+            corrupted data or device busy. manual register writes via MMIO, manual PCI BAR
+            configuration — none of it helped.
+          </p>
+          <p>
+            two weeks lost. and there was a second problem lurking: even if i'd gotten the
+            serial link working, SMM code has its own initialization requirements that might
+            have silently swallowed the log output during early boot anyway. the timing just
+            doesn't align with when the serial driver is available.
+          </p>
+
+          <div class="result">
+            <span class="fail">[-]</span> PCI COM card: not viable in UEFI context. LSR = 0xFF / 0x4D. abandoned.
+          </div>
+
+          <p>
+            decision: swap the board. got a <code>P8H61M-Pro</code>, which has a native
+            COM header and more interfaces in general. pulled a fresh dump, rewrote the
+            DEPEX for the new board, rebuilt the FFS container, injected, booted.
+          </p>
+
+
+          <!-- IMAGE: serial output -->
+          <div class="img-placeholder">
+             <img src="https://github.com/trueAnectode1337/logfiles/blob/main/log1/console.jpg?raw=true" width="340" height="200" alt="ttylog">
+          </div>
+
+          <div class="result">
+            <span class="ok">[+]</span> serial output confirmed. log data visible. we're in.
+          </div>
+
+          <!-- closing -->
+          <h3>closing thoughts</h3>
+          <p>
+            that was the "small" expedition into firmware injection and hardware debugging.
+            what looked like a straightforward task turned into a multi-week hardware
+            debugging session — two boards, a pile of failed COM configurations, and a
+            healthy disrespect for vendor documentation.
+            the main takeaways:
+          </p>
+          <p style="color:#444;">
+            — always dump the firmware yourself, never flash from a vendor download<br>
+            — bare <code>.efi</code> won't load without proper FFS wrapping<br>
+            — cheap PCI serial cards are essentially broken in UEFI without custom drivers<br>
+            — native COM headers are worth the extra few euros on the board
+          </p>
+          <p>
+            hope this was useful. more to come when i have something worth writing down.
+          </p>
+
+          <!-- sign off -->
+          <div class="signoff">
+            — anecdote // directly from the hardware hacking world<br>
+            <span style="color:#1e1e1e;">2026-04-05 // H61 platform series // log_000</span>
+          </div>
+
+          <!-- IRC disconnect -->
+          <div class="irc-footer">
+            <span style="color:#222;">*** anecdote has quit</span>
+            <span style="color:#1a1a1a;">(connection closed: /disconnect)</span>
+          </div>
+
+        </div><!-- /post-body -->
+      </main>
+    </div>
+
+    <footer>
+      <p>anecdote shelter © 2026</p>
+      <p><span class="f-prompt">anecdote@shelter:~$</span> <span class="f-cmd">cd ../logs && ls -la</span></p>
+    </footer>
+  </div>
+  <script src="../shelter.js"></script>
+</body>
+</html>
