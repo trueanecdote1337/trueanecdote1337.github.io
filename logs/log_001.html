@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>log_001 // anecdote shelter</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .irc-header {
+      border: 1px solid #1e1e1e;
+      padding: 1rem 1.2rem;
+      margin-bottom: 2.5rem;
+      font-size: 12px;
+      color: #333;
+      line-height: 2;
+      background: #030303;
+    }
+    .irc-header .irc-sys  { color: #2a4a2a; }
+    .irc-header .irc-cmd  { color: #2a2a5a; }
+    .irc-header .irc-join { color: #4a2a00; }
+    .irc-header .irc-nick { color: var(--red-dim); }
+
+    .post-body {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.9;
+    }
+    .post-body p { margin-bottom: 1.4rem; }
+    .post-body h3 {
+      color: var(--red);
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin: 2.5rem 0 1rem;
+      font-weight: 700;
+    }
+    .post-body h3::before { content: '── '; color: #222; }
+
+    .method-label {
+      display: inline-block;
+      border: 1px solid #2a0000;
+      color: var(--red-dim);
+      font-size: 11px;
+      padding: 0.1rem 0.6rem;
+      margin-bottom: 1rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    code {
+      color: #884444;
+      background: #0a0000;
+      padding: 0.1rem 0.4rem;
+      font-size: 12px;
+      border: 1px solid #1e1e1e;
+    }
+
+    .img-placeholder {
+      border: 1px dashed #1e1e1e;
+      padding: 1.5rem;
+      margin: 1.4rem 0;
+      color: #252525;
+      font-size: 12px;
+      text-align: center;
+      background: #030303;
+    }
+    .img-placeholder span { color: #2a2a2a; }
+
+    .link-placeholder {
+      display: inline-block;
+      color: #2a2a6a;
+      font-size: 12px;
+      border-bottom: 1px dashed #1a1a3a;
+      margin: 0.3rem 0;
+      text-decoration: none;
+    }
+    .link-placeholder::before { content: '> '; color: #222; }
+
+    .hw-table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1rem 0 1.4rem;
+      font-size: 12px;
+    }
+    .hw-table td {
+      padding: 0.3rem 0.8rem 0.3rem 0;
+      color: #444;
+      border-bottom: 1px solid #111;
+      vertical-align: top;
+    }
+    .hw-table td:first-child {
+      color: #2e2e2e;
+      min-width: 140px;
+      white-space: nowrap;
+    }
+    .hw-table td:last-child { color: #666; }
+
+    .result {
+      border-left: 2px solid var(--red-dim);
+      padding: 0.7rem 1rem;
+      margin: 1.4rem 0;
+      background: #060000;
+      font-size: 12px;
+      color: #555;
+    }
+    .result .ok   { color: #2a6a2a; font-weight: bold; }
+    .result .fail { color: var(--red-dim); font-weight: bold; }
+    .result .info { color: #2a4a6a; font-weight: bold; }
+
+    .note {
+      border: 1px dashed #1a1a1a;
+      padding: 0.7rem 1rem;
+      margin: 1.2rem 0;
+      font-size: 12px;
+      color: #333;
+      background: #020202;
+    }
+    .note::before { content: 'note: '; color: #2a2a00; }
+
+    .warn {
+      border: 1px dashed #2a0000;
+      padding: 0.7rem 1rem;
+      margin: 1.2rem 0;
+      font-size: 12px;
+      color: #3a1a1a;
+      background: #040000;
+    }
+    .warn::before { content: 'warning: '; color: var(--red-dim); }
+
+    /* spoiler / collapsed block */
+    .spoiler-toggle {
+      cursor: pointer;
+      color: #2a2a2a;
+      font-size: 12px;
+      border: 1px solid #1a1a1a;
+      padding: 0.4rem 0.8rem;
+      display: inline-block;
+      margin-bottom: 0;
+      user-select: none;
+      background: #030303;
+      transition: color 0.1s;
+    }
+    .spoiler-toggle:hover { color: var(--red-dim); border-color: #2a0000; }
+    .spoiler-toggle::before { content: '[+] '; color: #2a0000; }
+    .spoiler-toggle.open::before { content: '[-] '; }
+    .spoiler-body {
+      display: none;
+      border: 1px solid #141414;
+      border-top: none;
+      padding: 0.8rem 1rem;
+      margin-bottom: 1.4rem;
+      font-size: 12px;
+      color: #444;
+      background: #020202;
+      line-height: 1.9;
+    }
+
+    .reg { color: #884400; font-weight: bold; }
+
+    .signoff {
+      margin-top: 3rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid #181818;
+      font-size: 12px;
+      color: #2a2a2a;
+    }
+
+    .irc-footer { margin-top: 2rem; font-size: 12px; color: #222; }
+
+    .back {
+      display: inline-block;
+      color: var(--light);
+      text-decoration: none;
+      font-size: 12px;
+      margin-bottom: 2rem;
+    }
+    .back:hover { color: var(--red-bright); }
+    .back::before { content: '< '; color: #333; }
+
+    /* capability grid */
+    .cap-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+      margin: 1rem 0 1.4rem;
+      font-size: 12px;
+    }
+    .cap-item {
+      border: 1px solid #181818;
+      padding: 0.5rem 0.8rem;
+      color: #444;
+      background: #030303;
+    }
+    .cap-item .cap-label { color: #2a2a2a; font-size: 11px; margin-bottom: 0.2rem; }
+    .cap-item .ok   { color: #2a5a2a; }
+    .cap-item .fail { color: var(--red-dim); }
+    @media (max-width: 600px) { .cap-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="container">
+
+    <pre class="logo">anecdote shelter // log_001</pre>
+    <div class="prompt">anecdote@shelter:/logs/log_001<span class="cursor"></span></div>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <nav>
+          <ul>
+            <li><a href="../index.html">/shelter</a></li>
+            <li><a href="../blog.html">/logs</a></li>
+            <li><a href="../about.html">/whoami</a></li>
+            <li><a href="https://github.com/anecdote666" target="_blank">/src</a></li>
+          </ul>
+        </nav>
+
+        <div class="sidebar-meta" style="margin-top:2rem;">
+          > log_001.html<br>
+          > topic: intel dci<br>
+          > platform: Z390<br>
+          > cpu: i7-9700K<br>
+          > date: 2026-06-07
+        </div>
+
+        <div class="status-box" style="margin-top:1.8rem;">
+          <h3>env</h3>
+          <ul>
+            <li>iface . <span class="red">USB3 DbC</span></li>
+            <li>tool . . <span class="red">Sys Studio</span></li>
+            <li>cpu link <span class="red">PARTIAL</span></li>
+            <li>pci dma  <span class="red">ACTIVE</span></li>
+          </ul>
+        </div>
+      </aside>
+
+      <main class="content">
+
+        <a href="../blog.html" class="back">back to /logs</a>
+
+        <!-- IRC header -->
+        <div class="irc-header">
+          <span class="irc-sys">[server]</span> connecting to <span class="irc-cmd">darknoise://127.0.0.1:6667</span> ...<br>
+          <span class="irc-sys">[notice]</span> <span class="irc-nick">-ChanServ-</span> welcome to <span class="irc-cmd">##anecdote-shelter</span><br>
+          <span class="irc-cmd">*** anecdote</span> <span class="irc-join">has joined</span> <span class="irc-cmd">#log1</span><br>
+          <span class="irc-sys">[mode]</span> +o anecdote
+        </div>
+
+        <!-- title -->
+        <div style="margin-bottom:2rem;">
+          <div style="color:#2a2a2a;font-size:11px;margin-bottom:0.4rem;">log_001 // 2026-06-07</div>
+          <h2 style="margin:0 0 0.5rem;font-size:16px;letter-spacing:1px;text-transform:none;color:var(--text);">
+            Intel DCI on Z390 — debugging your own machine (sort of)
+          </h2>
+          <div style="color:#333;font-size:12px;">
+            <span class="tag">intel dci</span>
+            <span class="tag">jtag</span>
+            <span class="tag">firmware</span>
+            <span class="tag">z390</span>
+            <span class="tag">hardware</span>
+          </div>
+        </div>
+
+        <div class="post-body">
+
+          <!-- intro -->
+          <p>
+            hey. this is my second entry, and it's essentially a continuation of my wanderings
+            through the world of hardware hacking. today we're touching on a genuinely interesting
+            piece of Intel technology: <strong style="color:#aaa;">DCI</strong> — Direct Connect Interface.
+          </p>
+          <p>
+            the short pitch: DCI lets you debug hardware directly. not through the OS,
+            not through a hypervisor, not through software abstractions —
+            <em>directly</em>. compared to this, USB/serial debugging feels like sending
+            letters by postal mail.
+          </p>
+          <p>
+            what DCI gives you in theory:
+          </p>
+
+          <div class="cap-grid">
+            <div class="cap-item">
+              <div class="cap-label">per-thread visibility</div>
+              observe every thread and core, even on a hung or locked system
+            </div>
+            <div class="cap-item">
+              <div class="cap-label">register / memory access</div>
+              direct read/write to CPU registers and physical memory
+            </div>
+            <div class="cap-item">
+              <div class="cap-label">processor trace</div>
+              full execution trace — who touched what register, when, in what order
+            </div>
+            <div class="cap-item">
+              <div class="cap-label">halt &amp; resume</div>
+              stop the machine mid-execution and look around. like GDB but at ring -∞
+            </div>
+          </div>
+
+          <p>
+            think of it as a VM debugger, except the "VM" is your actual physical machine.
+            the control software is basically Intel's proprietary WinDbg. and yes —
+            this only exists from Skylake onwards, so my H61 from log_000 is sitting
+            this one out entirely. (sorry old friend.)
+          </p>
+
+          <!-- hardware -->
+          <h3>hardware this time</h3>
+          <p>
+            for once, i'm testing on my main machine. coffee lake = DCI capable. no excuses.
+          </p>
+          <table class="hw-table">
+            <tr><td>cpu</td><td>Intel Core i7-9700K (Coffee Lake)</td></tr>
+            <tr><td>board</td><td>ASUS PRIME Z390-A</td></tr>
+            <tr><td>ram</td><td>G.Skill 32 GB @ 3600 MHz</td></tr>
+            <tr><td>psu</td><td>1000W (finally, a real PSU)</td></tr>
+          </table>
+
+          <!-- bios dump -->
+          <h3>step 1 — bios dump and hidden settings</h3>
+          <div class="method-label">tool: amibcp + intel fit</div>
+
+          <p>
+            as always: dump the firmware first. i can't stress this enough.
+            i used a programmer for this, but if you don't have one nearby,
+            <code>Intel FPT</code>, <code>Chipsec</code>, or <code>flashrom</code>
+            will get the job done. i usually default to FPT — it's familiar.
+          </p>
+          <p>
+            with the dump in hand, i went digging. board vendors typically don't
+            remove DCI-related settings — they just hide them from the UI.
+            which means they're still there, waiting. i started with <code>AMIBCP</code>
+            for analysis, same as with the older boards. found versions 4.55 and 5.02
+            online, but both choked on this dump with an "exceeded row count" error.
+          </p>
+          <p>
+            workaround: downgrade the firmware from version <code>2101</code>
+            (my latest) to <code>1401</code>. that made AMIBCP happy and the file opened.
+            inside: the DCI fields — <code>USB DCI support</code>, <code>DCI DbC</code>,
+            and others.
+          </p>
+
+          <p>
+            after editing and saving, the obvious question: how do you flash this back?
+            ran <code>Chipsec</code> and <code>flashrom</code> — both confirmed the flash
+            is write-protected. so, programmer time.
+          </p>
+          <p>
+            new problem: modern ASUS boards typically have the BIOS chip soldered directly
+            to the PCB instead of sitting in a socket. no clip, no easy extraction.
+            but there's an alternative: <strong style="color:#888;">SPI flash header</strong>.
+          </p>
+
+          <!-- IMAGE: SPI flash header -->
+          <div class="img-placeholder">
+            <img src="https://raw.githubusercontent.com/trueanecdote1337/logfiles/refs/heads/main/log2/spi.jpg" width="350" height="200" alt="SPI">
+          </div>
+
+          <p>
+            the board exposes the flash programming pins directly on the PCB.
+            no desoldering required — connect the programmer to the header, flash.
+            you can order a proper connector, but i made mine from pins salvaged
+            from an old case. works fine.
+          </p>
+
+          <div class="warn">
+            in my setup it was necessary to supply 3.3V from the programmer rather
+            than using standby voltage from the board. pay attention to this.
+          </div>
+
+          <!-- spoiler: experiments -->
+          <div class="spoiler-toggle" id="sp1-toggle">voltage experiments (don't try this at home)</div>
+          <div class="spoiler-body" id="sp1-body">
+            since i was already there, i ran some experiments so you don't have to.
+            flashed with standby voltage only — fine. flashed with 3.3V only — fine.
+            flashed with both simultaneously — fine. swapped wires around — fine.
+            the flash chip is surprisingly hard to kill. <em>but seriously, don't do this.</em>
+            it's not worth the risk and i got lucky.
+          </div>
+
+          <p>
+            flashing started fine. then the board bricked.
+            no POST, no response, nothing. tried reflashing the modified image several
+            different ways — no luck. turns out <code>AMIBCP</code> doesn't correctly
+            write its changes back into the binary. it reads fine, it edits fine,
+            it just silently corrupts the output. great tool.
+          </p>
+          <p>
+            pivoted to <code>Intel FIT</code> (Flash Image Tool) — a utility for
+            configuring firmware images and the ME region directly.
+          </p>
+
+          <div class="note">
+            Intel ME (Management Engine) is an autonomous low-power subsystem embedded
+            in virtually all Intel chipsets since 2008. it runs independently of the main CPU,
+            BIOS, and OS. FIT lets you configure it — including enabling or disabling
+            various hardware debug interfaces.
+          </div>
+
+          <p>
+            in FIT: disabled all write protections, enabled DCI, enabled the relevant
+            debug ports. flashed. board came back up.
+          </p>
+
+          <!-- IMAGE: FIT screenshots -->
+           <div class="img-placeholder">
+            <img src="https://raw.githubusercontent.com/trueanecdote1337/logfiles/refs/heads/main/log2/fit.jpg" width="550" height="300" alt="SPI">
+          </div>
+
+          <!-- cable and second machine -->
+          <h3>step 2 — second machine and the cable</h3>
+          <div class="method-label">interface: usb 3.0 dbc</div>
+
+          <p>
+            DCI requires two machines: the <em>target</em> (the one being debugged)
+            and the <em>host</em> (the one running the debugger). the proper Intel
+            hardware for this — the SVT CCA — costs more than my entire setup combined,
+            so we're using USB 3.0 with the DbC (Debug Class) protocol instead.
+          </p>
+          <p>
+            cable: bought a standard USB 3.0 cable for $3. before using it, stripped
+            the insulation and cut the red wire (VBUS). this makes sure the two
+            machines aren't sharing power rails. probably unnecessary, but it's a
+            two-second precaution.
+          </p>
+
+          <div class="result">
+            <span class="info">[~]</span> connected both machines. no response. something is blocking it.
+          </div>
+
+          <!-- nvram -->
+          <h3>step 3 — nvram editing</h3>
+          <div class="method-label">tool: scewin</div>
+
+          <p>
+            since we couldn't expose the DCI settings through the UEFI UI,
+            the next option is editing <strong style="color:#888;">NVRAM</strong> directly.
+            NVRAM holds the UEFI variable store — settings that persist across reboots
+            until you pull the CMOS battery.
+          </p>
+          <p>
+            you can dump NVRAM with <code>IFR Extractor</code> and edit values manually
+            through GRUB2, but the easier path on Windows is <code>SCEWin</code>:
+            dumps NVRAM to a readable file, you edit the values directly, then write it back.
+          </p>
+                  <!-- IMAGE: SCE dump -->
+          <div class="img-placeholder">
+            <img src="https://raw.githubusercontent.com/trueanecdote1337/logfiles/refs/heads/main/log2/nvram.jpg" width="500" height="650" alt="SPI">
+          </div>
+
+          <p>
+            after applying the NVRAM edits and rebooting, the system came up on the
+            third attempt. three reboots on first apply = the changes took effect,
+            the firmware is doing its initialization dance.
+          </p>
+
+          <div class="result">
+            <span class="ok">[+]</span> system booted after 3 attempts. NVRAM changes applied.
+          </div>
+
+          <p>
+            then: a new USB device appeared on the target machine.
+            a "Synaptics USB controller" — spelled incorrectly, as "controler".
+            (an Easter egg from Intel, or just a typo that shipped to production
+            and nobody cared. either way, charming.)
+            on the host side: an unknown USB device.
+          </p>
+
+          <!-- software -->
+          <h3>step 4 — debugger software</h3>
+          <div class="method-label">tool: intel system studio 2020</div>
+
+          <p>
+            you can't just talk to DCI with a raw terminal. you need Intel System Studio,
+            which in 2026 has been absorbed into OneAPI and become genuinely unpleasant
+            to use. found a 2020 standalone build floating around — it works.
+          </p>
+          <p>
+            OpenBMC is theoretically an option here too, but without Intel's proprietary
+            drivers, you're not going to get far. System Studio it is.
+          </p>
+          <p>
+            after installing and connecting: i got in. partial connection to the target machine.
+          </p>
+
+          <div class="result">
+            <span class="ok">[+]</span> DCI connection established.<br>
+            <span class="fail">[-]</span> CPU link: not available. PCI lines only.
+          </div>
+
+          <!-- what works / what doesn't -->
+          <h3>what we actually have</h3>
+
+          <div class="cap-grid">
+            <div class="cap-item">
+              <div class="cap-label">DMA access</div>
+              <span class="ok">available</span> — read/write physical memory via PCI
+            </div>
+            <div class="cap-item">
+              <div class="cap-label">JTAG / halt</div>
+              <span class="fail">not available</span> — no CPU link
+            </div>
+            <div class="cap-item">
+              <div class="cap-label">PCIe config registers</div>
+              <span class="ok">available</span> — pre-initialization access to all devices
+            </div>
+            <div class="cap-item">
+              <div class="cap-label">processor trace</div>
+              <span class="fail">not available</span> — requires full CPU link
+            </div>
+            <div class="cap-item">
+              <div class="cap-label">GPIO / clock config</div>
+              <span class="ok">available</span>
+            </div>
+            <div class="cap-item">
+              <div class="cap-label">SPI flash r/w</div>
+              <span class="ok">available</span>
+            </div>
+          </div>
+
+          <!-- research and failure -->
+          <h3>the deep dive — and the wall</h3>
+
+          <p>
+            no CPU link was frustrating. spent a significant chunk of time comparing
+            results against other platforms and boards, reviewing BIOS settings,
+            going through every port on the machine. found one USB port that responded
+            more strongly than the others — when you lose contact with it, the machine
+            reboots. that's a good sign. but still no processor link.
+          </p>
+          <p>
+            bought a dedicated DCI cable from a Chinese vendor for $30, advertised
+            as "guaranteed to work" etc. identical result. cables aren't the problem.
+          </p>
+          <p>
+            found a boardview and schematic for the Z390-A. probed the relevant
+            contacts with a multimeter — signal is present. traced the DCI lines
+            through the schematic looking for anything abnormal.
+          </p>
+          <p>
+            then found it.
+          </p>
+
+          <!-- IMAGE: schematic -->
+           <div class="img-placeholder">
+            <img src="https://raw.githubusercontent.com/trueanecdote1337/logfiles/refs/heads/main/log2/jtag.jpg" width="400" height="200" alt="JTAG">
+          </div>
+
+          <div class="img-placeholder">
+            <img src="https://raw.githubusercontent.com/trueanecdote1337/logfiles/refs/heads/main/log2/scheme.jpg" width="500" height="380" alt="Scheme">
+          </div>
+
+          <p>
+            on the schematic: a set of resistors with the annotation
+            <em>"place these resistors to enable DCI"</em>.
+            they are not populated on the production board. ASUS cut the DCI line
+            at the PCB level — the CPU literally cannot enter debug mode without
+            these components physically present. some boards don't have this,
+            depends on the vendor and revision. this one does.
+          </p>
+
+          <div class="result">
+            <span class="fail">[-]</span> CPU debug link physically severed by unpopulated resistors. full DCI requires board-level rework.
+          </div>
+
+          <!-- what we kept -->
+          <h3>what we kept — pci_dma</h3>
+          <div class="method-label">capability: dma access over pci</div>
+
+          <p>
+            no processor trace. no halt. no per-core visibility. but we kept
+            <code>PCI_DMA</code> — and that's not nothing.
+          </p>
+          <p>
+            what PCI DMA access means in practice:
+          </p>
+          <p style="color:#444;">
+            — direct memory read/write bypassing IOMMU protection<br>
+            — access to PCIe device config registers before OS initialization<br>
+            — GPIO, clock generator, and power controller configuration<br>
+            — SPI flash read/write access<br>
+            — appears in Windows as a Synaptics device — nothing suspicious in device manager
+          </p>
+
+          <div class="note">
+            DMA (Direct Memory Access) allows a device to read and write system memory
+            without CPU involvement. IOMMU is the hardware mechanism that normally
+            restricts which memory regions a device can reach. bypassing it means
+            you can read/write arbitrary physical memory from the PCI bus.
+          </div>
+
+          <p>
+            the appearance as a Synaptics device is significant — from a software
+            perspective, nothing unusual is inserted into the PCIe slot.
+            the access vector is essentially invisible to anything looking at
+            the standard device tree.
+          </p>
+          <p>
+            use cases are wide. i'll leave the obvious ones as an exercise.
+            one reminder: this is research territory. everything here is
+            your own responsibility. i'm not pushing anything — just documenting
+            what the hardware actually does when you push it.
+          </p>
+          <p>
+            and for the record: this doesn't replace a proper DMA card,
+            and writing production tooling on top of this without Intel's
+            driver stack is a significant undertaking.
+          </p>
+
+          <!-- signoff -->
+          <div class="signoff">
+            — anecdote // still in the hardware, still finding walls<br>
+            <span style="color:#1e1e1e;">2026-06-07 // Z390 platform // log_001</span>
+          </div>
+
+          <div class="irc-footer">
+            <span style="color:#222;">*** anecdote has quit</span>
+            <span style="color:#1a1a1a;">(connection closed: /disconnect)</span>
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <footer>
+      <p>anecdote shelter © 2026</p>
+      <p><span class="f-prompt">anecdote@shelter:~$</span> <span class="f-cmd">cd ../logs && ls -la</span></p>
+    </footer>
+  </div>
+
+  <script src="../shelter.js"></script>
+  <script>
+    // spoiler toggle
+    document.getElementById('sp1-toggle').addEventListener('click', function() {
+      this.classList.toggle('open');
+      var b = document.getElementById('sp1-body');
+      b.style.display = b.style.display === 'block' ? 'none' : 'block';
+    });
+  </script>
+</body>
+</html>
